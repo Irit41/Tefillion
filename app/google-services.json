@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "21508500379",
+    "project_id": "tefillion-981d1",
+    "storage_bucket": "tefillion-981d1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:21508500379:android:da0e17855d4ddd6f768f3e",
+        "android_client_info": {
+          "package_name": "com.example.tefillion"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "21508500379-9paa1ssngs78dt23mqidjrg8mrfmvbcl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsycMkekfcNYvF-_9fpMeVuqx1gDkxgHU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "21508500379-9paa1ssngs78dt23mqidjrg8mrfmvbcl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
