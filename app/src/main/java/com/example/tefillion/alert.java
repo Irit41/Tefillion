@@ -10,22 +10,47 @@ import android.app.NotificationManager;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.android.volley.toolbox.HttpResponse;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 
 public class alert extends AppCompatActivity implements View.OnClickListener{
+
 
     Switch[] arr_of_switch =new Switch[7];
     Alert_Class[] alert_classes = new Alert_Class[7];
     LocalTime time = LocalTime.now();
     SharedPreferences sharedPreferences;
 
+    ListView listView;
+    ArrayList<String> tutorialList = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +87,12 @@ public class alert extends AppCompatActivity implements View.OnClickListener{
             }
         };
         thread.start();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime now = LocalDateTime.now();
+
+        String URL = "https://www.hebcal.com/zmanim?cfg=json&geonameid=293397&date="+dtf.format(now);
+        new FetchDataTask().execute(URL);
+
 
     }
 
@@ -226,6 +257,159 @@ public class alert extends AppCompatActivity implements View.OnClickListener{
         }
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private class FetchDataTask extends AsyncTask<String, Void, String> {
+        String data = null;
+        DownloadURL downloadURL = new DownloadURL();
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+                data = downloadURL.readUrl(params[0]);
+
+
+
+
+
+
+                // for (String a : originalString){
+                //      System.out.println(a);  System.out.println("a");
+                // }
+
+                System.out.println(time);
+
+               } catch (IOException e) {
+                e.printStackTrace();
+            }
+//            Log.d("TAG", "11111111111111111111111 : "+jsonArray);
+            return data;
+
+        }
+
+        @Override
+        protected void onPostExecute(String dataFetched) {
+            //parse the JSON data and then display
+            parseJSON(dataFetched);
+        }
+
+
+      
+
+        }
+
+        private void parseJSON(String data){
+            JSONObject object = null;
+            JSONObject jsonArray = null;
+            try {
+                object = new JSONObject(data);
+                jsonArray = object.getJSONObject("times");
+                JSONArray keys = jsonArray.names ();
+                String[] originalString=null;
+                List<String> times = new ArrayList<>();
+
+                for (int i = 0; i < keys.length (); ++i) {
+                    String key = keys.getString (i);
+                    String value = jsonArray.getString (key);
+                    originalString = value.split("T");
+                    String time = originalString[1].substring(0,5);
+                    times.add(time);
+            }
+
+//                yourJSonObject.getJSONObject("cover").getJSONObject("content").getJSONObject("article");
+
+        Log.d("TAG", "11111111111111111111111 : "+times);
+
+//            Log.d("App", "Erdfgdfgdfgdfg34555555555555555555 : " +data);
+//            JSONArray jsonArray = null;
+//             jsonArray = data.getJSONArray("results");
+//            private String convertInputStreamToString(InputStream InputStream inputStream;
+//            inputStream) throws IOException{
+//                BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
+//                String line = "";
+//                String result = "";
+//                while((line = bufferedReader.readLine()) != null)
+//                    result += line;
+//
+//                inputStream.close();
+//
+//            try{
+//                JSONArray jsonMainNode = new JSONArray(data);
+//
+//                int jsonArrLength = jsonMainNode.length();
+//
+//                for(int i=0; i < jsonArrLength; i++) {
+//                    JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
+//                    String postTitle = jsonChildNode.getString("post_title");
+//                    tutorialList.add(postTitle);
+//                }
+//
+//                // Get ListView object from xml
+//                listView = (ListView) findViewById(R.id.list);
+//
+//                // Define a new Adapter
+//                ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, android.R.id.text1, tutorialList);
+//
+//                // Assign adapter to ListView
+//                listView.setAdapter(adapter);
+
+//            }catch(Exception e){
+//                Log.i("App", "Error parsing data" +e.getMessage());
+//
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+//        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
 
